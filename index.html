@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Site com Câmera de Fundo</title>
+  <style>
+    body, html {
+      margin: 0; padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: black;
+    }
+    #camera {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      display: none; /* esconde até iniciar */
+    }
+    .content {
+      position: relative;
+      z-index: 1;
+      color: white;
+      text-align: center;
+      margin-top: 30%;
+      text-shadow: 0 0 10px black;
+    }
+    h1 { font-size: 3em; }
+    p { font-size: 1.2em; }
+    button {
+      padding: 10px 20px;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 5px;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      cursor: pointer;
+    }
+    button:hover { background: rgba(0,0,0,0.8); }
+  </style>
+</head>
+<body>
+
+  <video id="camera" autoplay playsinline></video>
+
+  <div class="content">
+    <h1>Bem-vindo</h1>
+    <p>Para começar, clique abaixo e permita o uso da câmera.</p>
+    <button id="startCamera">Ativar Câmera</button>
+  </div>
+
+  <script>
+    const video = document.getElementById('camera');
+    const btn = document.getElementById('startCamera');
+
+    btn.addEventListener('click', () => {
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false })
+        .then(stream => {
+          video.srcObject = stream;
+          video.style.display = 'block'; // mostra o vídeo após permissão
+          btn.style.display = 'none'; // esconde o botão
+        })
+        .catch(err => {
+          console.error("Erro ao acessar a câmera:", err);
+          alert("Não foi possível acessar a câmera. Verifique permissões.");
+        });
+    });
+  </script>
+
+</body>
+</html>
